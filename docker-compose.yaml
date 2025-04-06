@@ -4,46 +4,46 @@ services:
   # MongoDB Service
   mongodb:
     image: mongo:latest
-    container_name: jb-mission-04-mongodb
+    container_name: bank-mongodb
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
-      - jb-mission-04-network
+      - bank-network
 
   # Backend Service
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: jb-mission-04-backend
+    container_name: bank-backend
     restart: always
     ports:
       - "3000:3000"
     depends_on:
       - mongodb
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/jb-mission-04
+      - MONGODB_URI=mongodb://mongodb:27017/bank
     networks:
-      - jb-mission-04-network
+      - bank-network
 
   # Frontend Service
   frontend:
     build:
       context: ./client
       dockerfile: Dockerfile
-    container_name: jb-mission-04-frontend
+    container_name: bank-frontend
     restart: always
     ports:
       - "80:80"
     depends_on:
       - backend
     networks:
-      - jb-mission-04-network
+      - bank-network
 
 networks:
-  jb-mission-04-network:
+  bank-network:
     driver: bridge
 
 volumes:
