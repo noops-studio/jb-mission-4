@@ -1,0 +1,146 @@
+<!-- operation-form.component.html -->
+<div class="form-castle animate-fade-in">
+    <div class="form-castle__drawbridge">
+      <h2 class="form-castle__drawbridge-title">New Account Operation</h2>
+      <button class="form-castle__drawbridge-retreat" (click)="goBack()">Back to Operations</button>
+    </div>
+    
+    <div class="form-castle__interior">
+      <form [formGroup]="operationForm" (ngSubmit)="onSubmit()" class="magic-form">
+        <!-- Account Number Field -->
+        <div class="magic-form__group">
+          <label for="accountNumber" class="magic-form__group-label">Account Number</label>
+          <input 
+            type="text" 
+            id="accountNumber" 
+            formControlName="accountNumber" 
+            class="magic-form__group-input magic-form__group-input--readonly" 
+            [class.magic-form__group-input--error]="operationForm.get('accountNumber')?.invalid && operationForm.get('accountNumber')?.touched"
+            readonly
+          >
+          @if (operationForm.get('accountNumber')?.invalid && operationForm.get('accountNumber')?.touched) {
+            <div class="magic-form__group-error">
+              Valid account number is required.
+            </div>
+          }
+        </div>
+  
+        <!-- Operation Type Field -->
+        <div class="magic-form__group">
+          <label for="type" class="magic-form__group-label">Operation Type</label>
+          <select 
+            id="type" 
+            formControlName="type" 
+            class="magic-form__group-input magic-form__group-input--select"
+            [class.magic-form__group-input--error]="operationForm.get('type')?.invalid && operationForm.get('type')?.touched"
+          >
+            @for (type of operationTypes; track type.value) {
+              <option [value]="type.value">
+                {{ type.label }}
+              </option>
+            }
+          </select>
+          @if (operationForm.get('type')?.invalid && operationForm.get('type')?.touched) {
+            <div class="magic-form__group-error">
+              Please select an operation type.
+            </div>
+          }
+        </div>
+  
+        <!-- Amount Field -->
+        <div class="magic-form__group">
+          <label for="amount" class="magic-form__group-label">Amount</label>
+          <div class="magic-form__group-addon">
+            <div class="input-prefix">₪</div>
+            <input 
+              type="number" 
+              id="amount" 
+              formControlName="amount" 
+              class="magic-form__group-input" 
+              placeholder="Enter amount"
+              min="0.01" 
+              step="0.01"
+              [class.magic-form__group-input--error]="operationForm.get('amount')?.invalid && operationForm.get('amount')?.touched"
+            >
+          </div>
+          @if (operationForm.get('amount')?.invalid && operationForm.get('amount')?.touched) {
+            <div class="magic-form__group-error">
+              Amount must be greater than 0.
+            </div>
+          }
+        </div>
+  
+        <!-- Loan-specific fields -->
+        @if (operationForm.get('type')?.value === 'loan') {
+          <div class="loan-chamber animate-fade-in">
+            <!-- Interest Rate Field -->
+            <div class="magic-form__group">
+              <label for="interestRate" class="magic-form__group-label">Interest Rate</label>
+              <div class="magic-form__group-addon">
+                <input 
+                  type="number" 
+                  id="interestRate" 
+                  formControlName="interestRate" 
+                  class="magic-form__group-input" 
+                  placeholder="Enter interest rate"
+                  min="0.01" 
+                  step="0.01"
+                  [class.magic-form__group-input--error]="operationForm.get('interestRate')?.invalid && operationForm.get('interestRate')?.touched"
+                >
+                <div class="input-suffix">%</div>
+              </div>
+              @if (operationForm.get('interestRate')?.invalid && operationForm.get('interestRate')?.touched) {
+                <div class="magic-form__group-error">
+                  Interest rate is required for loans and must be greater than 0.
+                </div>
+              }
+            </div>
+  
+            <!-- Number of Payments Field -->
+            <div class="magic-form__group">
+              <label for="numberOfPayments" class="magic-form__group-label">Number of Payments</label>
+              <input 
+                type="number" 
+                id="numberOfPayments" 
+                formControlName="numberOfPayments" 
+                class="magic-form__group-input" 
+                placeholder="Enter number of payments"
+                min="1" 
+                step="1"
+                [class.magic-form__group-input--error]="operationForm.get('numberOfPayments')?.invalid && operationForm.get('numberOfPayments')?.touched"
+              >
+              @if (operationForm.get('numberOfPayments')?.invalid && operationForm.get('numberOfPayments')?.touched) {
+                <div class="magic-form__group-error">
+                  Number of payments is required for loans and must be at least 1.
+                </div>
+              }
+            </div>
+          </div>
+        }
+  
+        <!-- Error and Success Messages -->
+        @if (errorMessage) {
+          <div class="alert-potion alert-potion--error">
+            {{ errorMessage }}
+          </div>
+        }
+        @if (successMessage) {
+          <div class="alert-potion alert-potion--success">
+            {{ successMessage }}
+          </div>
+        }
+  
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="spell-button" 
+          [disabled]="operationForm.invalid || loading"
+        >
+          @if (loading) {
+            <span class="spell-button__spinner"></span>
+          }
+          Save Operation
+        </button>
+      </form>
+    </div>
+  </div>

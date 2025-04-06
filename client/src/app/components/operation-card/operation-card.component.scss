@@ -1,0 +1,86 @@
+.money-card {
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    &__header {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      
+      &-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+    }
+    
+    &__body {
+      padding: 1.5rem;
+    }
+    
+    &__data-row {
+      margin-bottom: 0.8rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      &-label {
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 0.5rem;
+        color: #7f8c8d;
+      }
+      
+      &-value {
+        font-weight: 500;
+      }
+    }
+    
+    // Card variations based on operation type
+    &--deposit {
+      background-color: #d5f5e3;
+      border-left: 5px solid #2ecc71;
+      
+      .money-card__header {
+        background-color: rgba(46, 204, 113, 0.2);
+        
+        &-title {
+          color: #27ae60;
+        }
+      }
+    }
+    
+    &--withdrawal {
+      background-color: #fadbd8;
+      border-left: 5px solid #e74c3c;
+      
+      .money-card__header {
+        background-color: rgba(231, 76, 60, 0.2);
+        
+        &-title {
+          color: #c0392b;
+        }
+      }
+    }
+    
+    &--loan {
+      background-color: #fef9e7;
+      border-left: 5px solid #f1c40f;
+      
+      .money-card__header {
+        background-color: rgba(241, 196, 15, 0.2);
+        
+        &-title {
+          color: #d35400;
+        }
+      }
+    }
+  }
