@@ -1,0 +1,23 @@
+<div class="card h-100" [ngClass]="getCardClass()">
+    <div class="card-header">
+      <h5 class="card-title mb-0">{{ getOperationTypeTranslation() }}</h5>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        <strong>Amount:</strong> ₪{{ operation.amount.toFixed(2) }}
+      </p>
+      <p class="card-text">
+        <strong>Date:</strong> {{ formatDate(operation.date) }}
+      </p>
+  
+      <!-- Additional information for loan operations -->
+      @if (operation.type === 'loan') {
+        <p class="card-text">
+          <strong>Interest Rate:</strong> {{ operation.interestRate }}%
+        </p>
+        <p class="card-text">
+          <strong>Number of Payments:</strong> {{ operation.numberOfPayments }}
+        </p>
+      }
+    </div>
+  </div>

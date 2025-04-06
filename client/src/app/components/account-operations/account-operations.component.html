@@ -1,0 +1,76 @@
+<!-- account-operations.component.html -->
+<div class="money-vault animate-fade-in">
+    <div class="money-vault__header">
+      <h2 class="money-vault__header-title">Bank Account Operations</h2>
+    </div>
+    
+    <div class="money-vault__body">
+      <form [formGroup]="accountForm" (ngSubmit)="fetchOperations()" class="account-detective">
+        <div class="account-detective__input-field">
+          <label for="accountNumber" class="account-detective__input-field-label">Account Number:</label>
+          <input 
+            type="text" 
+            id="accountNumber" 
+            formControlName="accountNumber" 
+            class="account-detective__input-field-text"
+            [class.error-shake]="accountForm.get('accountNumber')?.invalid && accountForm.get('accountNumber')?.touched"
+            placeholder="Enter account number"
+          >
+          @if (accountForm.get('accountNumber')?.invalid && accountForm.get('accountNumber')?.touched) {
+            <div class="account-detective__input-field-error">
+              Account number is required and must contain only numbers.
+            </div>
+          }
+        </div>
+        
+        <div class="account-detective__button-panel">
+          <button 
+            type="submit" 
+            class="wizard-button wizard-button--blue" 
+            [disabled]="accountForm.invalid || loading"
+          >
+            View Operations
+          </button>
+          
+          <button 
+            type="button" 
+            class="wizard-button wizard-button--green" 
+            [disabled]="accountForm.invalid || loading"
+            (click)="goToNewOperation()"
+          >
+            New Operation
+          </button>
+        </div>
+      </form>
+  
+      @if (errorMessage) {
+        <div class="alert-scroll alert-scroll--danger">
+          {{ errorMessage }}
+        </div>
+      }
+  
+      @if (operations.length === 0 && !loading && !errorMessage) {
+        <div class="alert-scroll alert-scroll--info">
+          No operations found for this account. Enter an account number and click "View Operations" to see account activities.
+        </div>
+      }
+  
+      @if (loading) {
+        <div class="whirly-spinner">
+          <div class="whirly-spinner__circle"></div>
+          <p class="whirly-spinner__text">Loading operations...</p>
+        </div>
+      }
+  
+      @if (operations.length > 0) {
+        <div class="operations-showcase animate-slide-up">
+          <h3 class="operations-showcase__title">Account Operations</h3>
+          <div class="operations-showcase__grid">
+            @for (operation of operations; track operation._id) {
+              <app-operation-card [operation]="operation"></app-operation-card>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
