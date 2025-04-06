@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest
+    container_name: jb-mission-04-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - jb-mission-04-network
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jb-mission-04-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/jb-mission-04
+    networks:
+      - jb-mission-04-network
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: jb-mission-04-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - jb-mission-04-network
+
+networks:
+  jb-mission-04-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
